@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Face Recognition Photo Finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Face Recognition Photo Finder</h1>
+            <div class="user-info">
+                <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+                <span class="user-email">{{ display_label }}</span>
+            </div>
+        </header>
+        
+        <main>
+            <div class="form-card">
+                <h2>Find Your Photos</h2>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="flash-message {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                
+                <form action="{{ url_for('process') }}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="drive_link">Google Drive Folder Link</label>
+                        <input type="text" id="drive_link" name="drive_link" placeholder="https://drive.google.com/drive/folders/..." required>
+                        <small>Share the folder with "Anyone with the link" for best results</small>
+                        <small id="drive-error" class="form-error" style="display:none;color:#c0392b;"></small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reference_image">Upload Your Reference Photo</label>
+
+                        <div id="drop-area" class="drop-area">
+                            <div class="drop-message">Drag &amp; drop a photo here or click to choose</div>
+                            <input type="file" id="reference_image" name="reference_image" accept="image/jpeg, image/png" required>
+                            <img id="preview-img" class="preview-img" src="" alt="Preview" style="display:none;" />
+                            <div class="file-info">
+                                <span id="file-name" class="file-name">No file chosen</span>
+                            </div>
+                        </div>
+
+                        <small>Upload a clear photo of your face (JPG or PNG)</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" id="submit-btn" class="btn btn-primary">Find My Photos</button>
+                    </div>
+                </form>
+                
+                <div class="info-box">
+                    <h3>How It Works</h3>
+                    <ol>
+                        <li>Provide a link to a Google Drive folder containing photos</li>
+                        <li>Upload a reference photo of yourself</li>
+                        <li>Our AI will analyze all photos to find matches</li>
+                        <li>View and download the matching photos</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Academic Prototype | Created for Educational Purposes</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() { initDashboardForm(); });
+    </script>
+</body>
+</html>

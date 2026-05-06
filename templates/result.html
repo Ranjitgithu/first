@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Face Recognition Photo Finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Face Recognition Photo Finder</h1>
+            <div class="user-info">
+                <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+                <span class="user-email">{{ display_label }}</span>
+            </div>
+        </header>
+        
+        <main>
+            <div class="results-card">
+                <h2>Matching Photos Found</h2>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="flash-message {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                
+                {% if images %}
+                    <div class="results-summary">
+                        <p>Found <strong>{{ images|length }}</strong> photo(s) matching your reference image.</p>
+                        <a href="{{ url_for('download') }}" class="btn btn-primary">Download All as ZIP</a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Search Again</a>
+                    </div>
+                    
+                    <div class="image-grid">
+                        {% for image in images %}
+                            <div class="image-item" data-image-url="{{ url_for('serve_image', image_name=image) }}">
+                                <img src="{{ url_for('serve_image', image_name=image) }}" alt="Matched photo" loading="lazy">
+                                <div class="image-overlay">
+                                    <a href="{{ url_for('serve_image', image_name=image) }}" target="_blank" class="btn btn-view">Open</a>
+                                    <a href="{{ url_for('serve_image', image_name=image) }}" target="_blank" download class="btn btn-download">Download</a>
+                                    <button class="btn btn-copy" data-link="{{ url_for('serve_image', image_name=image) }}">Copy Link</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-results">
+                        <p>No matching photos found. Please try with a different reference photo or folder.</p>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Try Again</a>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+        
+        <footer>
+            <p>Academic Prototype | Created for Educational Purposes</p>
+        </footer>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" style="display:none;">
+        <div class="lightbox-content">
+            <button class="lightbox-close">&times;</button>
+            <img id="lightbox-img" src="" alt="Preview">
+            <div class="lightbox-actions">
+                <a id="lightbox-download" class="btn btn-primary" href="#" target="_blank" download>Download</a>
+                <button id="lightbox-copy" class="btn btn-secondary">Copy Link</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>document.addEventListener('DOMContentLoaded', function(){ initResultPage(); });</script>
+</body>
+</html>

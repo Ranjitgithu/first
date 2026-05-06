@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Photo Finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Face Recognition Photo Finder</h1>
+            <div class="user-info">
+                {% if session.get('display_name') %}
+                    <span class="user-email">{{ session.get('display_name') }}</span>
+                {% else %}
+                    <form class="name-form" action="{{ url_for('set_name') }}" method="post">
+                        <input type="text" name="display_name" class="name-input" placeholder="Enter your name" maxlength="50" required>
+                        <button type="submit" class="btn btn-secondary">Save</button>
+                    </form>
+                {% endif %}
+            </div>
+            <p>Find your photos in Google Drive using facial recognition</p>
+        </header>
+        
+        <main>
+            <div class="login-card">
+                <h2>Welcome!</h2>
+                <p>This application helps you find photos of yourself in a shared Google Drive folder using facial recognition technology.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="icon">🔒</i>
+                        <h3>Secure</h3>
+                        <p>We only request read-only access to your Google Drive</p>
+                    </div>
+                    <div class="feature">
+                        <i class="icon">🤖</i>
+                        <h3>AI-Powered</h3>
+                        <p>Uses advanced facial recognition to find matching photos</p>
+                    </div>
+                    <div class="feature">
+                        <i class="icon">🗑️</i>
+                        <h3>Private</h3>
+                        <p>No images are stored permanently</p>
+                    </div>
+                </div>
+                
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Login with Google</a>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Academic Prototype | Created for Educational Purposes</p>
+        </footer>
+    </div>
+</body>
+</html>
