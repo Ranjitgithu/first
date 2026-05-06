@@ -331,3 +331,4 @@ def serve_image(image_name):
 if __name__ == "__main__":
     app.run(debug=True)
 print("ranjit kumar")
+print("ranjit kumar")
